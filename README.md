@@ -23,7 +23,7 @@
 
 ---
 
-## 🐳 4. Запуск в Docker (Production-ready)
+## 🐳 2. Запуск в Docker (Production-ready)
 
 Проект полностью контейнеризирован без лишних зависимостей. Образ собран на `python:3.12-slim` с легковесным PyTorch CPU, запускается под непривилегированным пользователем (`appuser`), оснащен `HEALTHCHECK` и предзагруженной оффлайн-моделью HuggingFace (`cointegrated/rubert-tiny2`).
 
@@ -47,7 +47,7 @@ docker compose run --rm benchmark
 
 ---
 
-## 📂 7. Структура проекта
+## 📂 3. Структура проекта
 
 ```
 netbell/
