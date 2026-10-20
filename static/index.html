@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Matcher — Скоринг бизнес-доменов кандидата и вакансии</title>
+  <meta name="description" content="Пайплайн скоринга бизнес-доменов на основе динамического графа связей и LLM реранкера">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="app-header">
+      <h1 class="main-title">AI Matcher: Скоринг бизнес-доменов</h1>
+      <p class="sub-title">Архитектура из презентации: обогащение контекстом, граф связей и Cross-Encoder реранкер</p>
+    </header>
+
+    <!-- Main Input Glass Panel -->
+    <section class="glass-panel">
+      <!-- Presets -->
+      <div class="presets-section">
+        <span class="section-label">Быстрые сценарии из ТЗ:</span>
+        <div class="preset-chips" id="presetChips">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+
+      <!-- Search Input Area -->
+      <div class="search-box-wrapper">
+        <label for="queryInput" class="section-label">Поисковый запрос рекрутера:</label>
+        <textarea 
+          id="queryInput" 
+          class="query-textarea" 
+          placeholder="Введите произвольный запрос рекрутера или выберите готовый сценарий выше..."
+          rows="3"
+        ></textarea>
+      </div>
+
+      <!-- Controls & Submit -->
+      <div class="search-controls-row">
+        <div class="toggle-group">
+          <label class="switch-label" style="gap: 0.4rem;">
+            <span>Выдача:</span>
+            <select id="topKSelect" class="top-k-select" autocomplete="off">
+              <option value="1">Топ 1</option>
+              <option value="2">Топ 2</option>
+              <option value="3" selected>Топ 3</option>
+              <option value="5">Топ 5</option>
+              <option value="8">Топ 8</option>
+            </select>
+          </label>
+        </div>
+
+        <button id="submitBtn" class="submit-btn" type="button">
+          <span>Рассчитать соответствие</span>
+        </button>
+      </div>
+
+      <!-- Parsed Query Breakdown -->
+      <div id="parsedBox" class="parsed-box">
+        <span class="section-label" style="color: var(--accent-indigo);">Извлеченные требования из запроса (Слайд 4):</span>
+        <div class="parsed-grid">
+          <div class="parsed-item">
+            <div class="parsed-item-label">Технический стек</div>
+            <div class="parsed-item-val" id="parsedStack">—</div>
+          </div>
+          <div class="parsed-item">
+            <div class="parsed-item-label">Макро-отрасль</div>
+            <div class="parsed-item-val" id="parsedIndustry">—</div>
+          </div>
+          <div class="parsed-item">
+            <div class="parsed-item-label">Целевой бизнес-домен</div>
+            <div class="parsed-item-val" id="parsedDomains">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <main>
+      <div class="results-header-row">
+        <h2 class="results-title">
+          Ранжирование кандидатов
+          <span class="results-count-badge" id="resultsCount">0</span>
+        </h2>
+      </div>
+
+      <!-- Container for Cards / Loading -->
+      <div id="candidatesContainer" class="candidates-list">
+        <div class="empty-state">
+          <p style="color: var(--text-muted); font-size: 1.05rem;">
+            Нажмите кнопку <strong>«Рассчитать соответствие»</strong> для запуска двухстадийного скоринга кандидатов.
+          </p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

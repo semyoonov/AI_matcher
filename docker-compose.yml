@@ -1,0 +1,45 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: netbell-matcher:latest
+    container_name: netbell-web
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - LLM_PROVIDER=${LLM_PROVIDER:-mistral}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_MODEL=${GROQ_MODEL:-llama-3.3-70b-versatile}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
+      - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-small-latest}
+    volumes:
+      - .:/app
+      - ./cache:/app/cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  benchmark:
+    image: netbell-matcher:latest
+    profiles: ["tools"]
+    command: ["python", "evaluation.py"]
+    volumes:
+      - ./cache:/app/cache
+    environment:
+      - LLM_PROVIDER=${LLM_PROVIDER:-groq}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
+
+  test:
+    image: netbell-matcher:latest
+    profiles: ["tools"]
+    command: ["python", "-m", "pytest", "tests/", "-v"]
+    environment:
+      - LLM_PROVIDER=mock
